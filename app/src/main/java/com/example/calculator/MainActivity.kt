@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
 fun CalculatorScreen() {
     var input by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
+    var lastResult by remember { mutableStateOf("") } // Хранение последнего результата
 
     Column(
         modifier = Modifier
@@ -48,7 +49,7 @@ fun CalculatorScreen() {
     ) {
         // Экран вывода результатов
         Text(
-            text = if (result.isEmpty()) input else result,
+            text = if (input.isEmpty()) result else input,
             fontSize = 48.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -77,14 +78,25 @@ fun CalculatorScreen() {
                 ) {
                     for (buttonText in row) {
                         CalculatorButton(buttonText) {
-                            input = handleInput(buttonText, input, result)
-                            if (buttonText == "=") {
-                                result = calculateResult(input)
-                                input = ""
-                            }
-                            if (buttonText == "C") {
-                                input = ""
-                                result = ""
+                            when (buttonText) {
+                                "=" -> {
+                                    result = calculateResult(input)
+                                    lastResult = result  // Сохраняем результат для дальнейшего использования
+                                    input = ""
+                                }
+                                "C" -> {
+                                    input = ""
+                                    result = ""
+                                    lastResult = ""
+                                }
+                                else -> {
+                                    if (input.isEmpty() && lastResult.isNotEmpty()) {
+                                        input = lastResult + buttonText
+                                        lastResult = "" // Очистить после использования
+                                    } else {
+                                        input += buttonText
+                                    }
+                                }
                             }
                         }
                     }
@@ -98,25 +110,18 @@ fun CalculatorScreen() {
 fun CalculatorButton(text: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .padding(8.dp)
-            .size(64.dp)
+            .padding(1.dp)
+            .size(90.dp)
             .background(Color.Gray)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
-            fontSize = 24.sp,
+            fontSize = 30.sp,
             color = Color.White,
             modifier = Modifier.align(Alignment.Center)
         )
-    }
-}
-
-fun handleInput(buttonText: String, currentInput: String, result: String): String {
-    return when (buttonText) {
-        "=" -> currentInput
-        else -> currentInput + buttonText
     }
 }
 
