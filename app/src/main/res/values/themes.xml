@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonStyle" parent="android:Widget.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">#2196F3</item> <!-- Синий фон -->
+        <item name="android:layout_margin">5dp</item> <!-- Отступы -->
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="Theme.Calculator" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
